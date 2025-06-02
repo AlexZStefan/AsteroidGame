@@ -10,19 +10,37 @@ public class ShipFire : MonoBehaviour
     [SerializeField] private float attackCooldown = .5f;
     [SerializeField] private int projectileSpeed = 1500;
     [SerializeField] List<Projectile> ammo = new List<Projectile>();
-
-    private int attackIndex = 0;
+    private GameObject projectileContainer;
 
     private void Start()
     {
         if (!projectilePrefab) projectilePrefab = Resources.Load<GameObject>("Prefabs/Projectile");
+        if (!projectileContainer) projectileContainer = new GameObject("ProjectileContainer");
+    }
+
+    private void OnEnable()
+    {
+        Menu.onRestart += Restart;
+    }
+
+    private void OnDisable()
+    {
+        Menu.onRestart -= Restart;
+    }
+
+    private void Restart()
+    {
+        foreach(Transform t in projectileContainer.transform)
+        {
+            var projectile = t.GetComponentInChildren<Projectile>(true);
+            projectile.gameObject.SetActive(false);
+        }
     }
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space) && canAttack && !Player.invulnerable)
         {
-            StopAllCoroutines();
             StartCoroutine(Attack());
         }
     }
@@ -36,24 +54,21 @@ public class ShipFire : MonoBehaviour
     {
         Projectile projectile;
         if (ammo.Count == 0)
-            projectile = Instantiate(projectilePrefab).GetComponent<Projectile>();
+            projectile = Instantiate(projectilePrefab, projectileContainer.transform).GetComponentInChildren<Projectile>();
         else
         {
             projectile = ammo[0];
-            ammo.Remove(projectile);
+            ammo.RemoveAt(0);
         }
-
         return projectile;
     }
 
     private IEnumerator Attack()
     {
+        SoundManager.Instance.PlaySFX("SFX_fire");
         canAttack = false;
         Projectile projectile = GetProjectile();
-        projectile.gameObject.SetActive(true);
         projectile.Shoot(transform, projectileSpeed);
-        if (attackIndex > ammo.Count - 1) attackIndex = 0;
-        else attackIndex++;
         yield return new WaitForSeconds(attackCooldown);
         canAttack = true;
     }
