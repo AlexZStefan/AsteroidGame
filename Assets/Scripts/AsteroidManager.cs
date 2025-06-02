@@ -12,13 +12,14 @@ public class AsteroidManager : MonoBehaviour
 
     private GameObject asteroidPrefab;
     private GameObject smallAsteroidPrefab;
+
     private void Start()
     {
         if (instance == null) instance = this;
-
         asteroidPrefab = Resources.Load<GameObject>("Prefabs/Asteroid");
         smallAsteroidPrefab = Resources.Load<GameObject>("Prefabs/SmallAsteroid");
     }
+
  
     private void StartGame()
     {
@@ -58,21 +59,26 @@ public class AsteroidManager : MonoBehaviour
 
     internal static void SpawnSmallerAsteroids(Vector3 position)
     {
-        int ammount = Random.Range(2, 4);
+        int amount = Random.Range(2, 4);
 
-        if (instance.smallAsteroidsPool.Count < ammount)
+        // create new asteroids if not in pool
+        while (instance.smallAsteroidsPool.Count < amount)
         {
-            for (int i = 0; i < ammount; i++)
-            {
-                instance.smallAsteroidsPool.Add(Instantiate(instance.smallAsteroidPrefab, instance.transform));
-            }
+            GameObject newAsteroid = Instantiate(instance.smallAsteroidPrefab, instance.transform);
+            newAsteroid.SetActive(false);
+            instance.smallAsteroidsPool.Add(newAsteroid);
         }
-        for (int i = 0; i < ammount; i++)
+
+        for (int i = 0; i < amount; i++)
         {
-            GameObject asteroid = instance.smallAsteroidsPool[instance.smallAsteroidsPool.Count-1];
-            Vector3 offset = (Vector3)Random.insideUnitCircle.normalized * 2;
-            asteroid.transform.position = asteroid.transform.position + offset + position;
-            instance.smallAsteroidsPool.Remove(asteroid);
+            int lastIndex = instance.smallAsteroidsPool.Count - 1;
+            GameObject asteroid = instance.smallAsteroidsPool[lastIndex];
+            instance.smallAsteroidsPool.RemoveAt(lastIndex);
+
+            Vector3 offset = (Vector3)Random.insideUnitCircle.normalized * 2f;
+            asteroid.transform.position = position + offset;
+            asteroid.transform.rotation = Quaternion.Euler(0, 0, Random.Range(0f, 360f));
+            asteroid.SetActive(true);
         }
     }
 

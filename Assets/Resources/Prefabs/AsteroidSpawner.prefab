@@ -46,3 +46,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bigAsteroidsPool: []
   smallAsteroidsPool: []
+  spawnCooldown: 3

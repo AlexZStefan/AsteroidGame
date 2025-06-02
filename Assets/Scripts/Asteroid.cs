@@ -13,8 +13,8 @@ public class Asteroid : MonoBehaviour
 
     [SerializeField] private int maxSpeed = 150;
     [SerializeField] private int minSpeed = 50;
-
     private Rigidbody2D rb;
+
 
     private void Start()
     {
@@ -41,6 +41,8 @@ public class Asteroid : MonoBehaviour
     {
         if (collision.gameObject.tag == "Projectile")
         {
+
+            SoundManager.Instance.PlaySFX("SFX_asteroid_blow");
             Destroy();
             switch (asteroidSize)
             {
@@ -52,7 +54,6 @@ public class Asteroid : MonoBehaviour
                     break;
             }
         }
-       
     }
 
     public void Destroy()
