@@ -207,7 +207,7 @@ Rigidbody2D:
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDamping: 2
-  m_AngularDamping: 2
+  m_AngularDamping: 6
   m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -292,7 +292,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18aa946b670268142ba21c6fb77a54d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectilePrefab: {fileID: 4129642429949773550, guid: e5895c1a206fd9541988fc36e53f0bbc, type: 3}
+  projectilePrefab: {fileID: 4260306037466006088, guid: 68365f7773e4f644bb84aa00d6ae4361, type: 3}
   attackCooldown: 0.5
   projectileSpeed: 1500
   ammo: []
