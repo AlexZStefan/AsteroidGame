@@ -97,6 +97,7 @@ public class SoundManager : MonoBehaviour
             musicSource.clip = clip;
             musicSource.volume = musicVolume;
             musicSource.Play();
+            musicSource.loop = true;
         }
     }
 

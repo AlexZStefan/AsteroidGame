@@ -41,7 +41,6 @@ public class Asteroid : MonoBehaviour
     {
         if (collision.gameObject.tag == "Projectile")
         {
-
             SoundManager.Instance.PlaySFX("SFX_asteroid_blow");
             Destroy();
             switch (asteroidSize)

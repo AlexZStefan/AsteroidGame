@@ -12,10 +12,19 @@ public class ShipFire : MonoBehaviour
     [SerializeField] List<Projectile> ammo = new List<Projectile>();
     private GameObject projectileContainer;
 
+    private GameObject smartMisilePrefab;
+    private bool smartMisile = false;
+
     private void Start()
     {
-        if (!projectilePrefab) projectilePrefab = Resources.Load<GameObject>("Prefabs/Projectile");
-        if (!projectileContainer) projectileContainer = new GameObject("ProjectileContainer");
+        if (!projectilePrefab)  projectilePrefab        = Resources.Load<GameObject>("Prefabs/Projectile");
+        if (!projectileContainer) projectileContainer   = new GameObject("ProjectileContainer");
+        if (!smartMisilePrefab) smartMisilePrefab       = Resources.Load<GameObject>("Prefabs/SmartMisile");
+    }
+
+    public void EquipSmartMisile()
+    {
+        smartMisile = true;
     }
 
     private void OnEnable()
@@ -41,8 +50,24 @@ public class ShipFire : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space) && canAttack && !Player.invulnerable)
         {
-            StartCoroutine(Attack());
+            if(!smartMisile)
+                StartCoroutine(Attack());
+            else
+            {
+                SpawnSmartMisile();
+            }
         }
+    }
+
+    private void SpawnSmartMisile()
+    {
+        // this is ugly, I am aware
+        var misile = Instantiate(smartMisilePrefab);
+        misile.transform.position = transform.position + transform.up;
+        var superMisile = misile.GetComponentInChildren<SuperMisile>();
+        misile.gameObject.SetActive(true);
+        superMisile.ApplyInitialForce(transform.up);
+        smartMisile = false;
     }
 
     public void AddToPool(Projectile projectile)

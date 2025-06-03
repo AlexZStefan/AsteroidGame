@@ -5,6 +5,7 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
     [SerializeField] private GameObject playerPrefab;
     [SerializeField] private Menu mainMenu;
+    [SerializeField] private GameObject enemyPrefab;
     private GameObject player;
 
     void Start()
@@ -15,9 +16,22 @@ public class GameManager : MonoBehaviour
         }
 
         if (playerPrefab == null) playerPrefab = Resources.Load<GameObject>("Prefabs/Player");
+        if (enemyPrefab == null) enemyPrefab = Resources.Load<GameObject>("Prefabs/EnemySpaceShip");
 
         Initialise();
         Time.timeScale = 0f;
+    }
+
+    // this is for testing
+    public void AddSmartRocket()
+    {
+        player.GetComponent<ShipFire>().EquipSmartMisile();
+    }
+
+    // this is for testing
+    public void AddEnemy()
+    {
+        Instantiate(enemyPrefab);
     }
 
     private void OnEnable()
